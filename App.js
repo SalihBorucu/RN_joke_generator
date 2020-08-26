@@ -19,7 +19,7 @@ export default function App() {
         return <AppLoading />;
     } else {
         function pressedButton() {
-          setJoke({});
+            setJoke({ wait: true });
             axios
                 .get('https://official-joke-api.appspot.com/random_joke')
                 .then((res) => {
@@ -27,7 +27,7 @@ export default function App() {
                 })
                 .catch();
         }
-        if (Object.keys(joke).length) {
+        if (joke.hasOwnProperty('setup')) {
             let delayMap = [{ at: joke.setup.length, delay: 1500 }];
             return (
                 <View style={styles.container}>
@@ -38,6 +38,15 @@ export default function App() {
                         {joke.punchline}
                     </TypeWriter>
                     <Button btnDelayTime={10000} btnTextStyle={styles.btnTextStyle} pressingButton={pressedButton} btnText="Tell me more!" />
+                </View>
+            );
+        } else if (Object.keys(joke).length === 1) {
+            return (
+                <View style={styles.container}>
+                    <TypeWriter typing={1} style={styles.typeWriter}>
+                        Ummm...
+                        {'\n'}
+                    </TypeWriter>
                 </View>
             );
         } else {
